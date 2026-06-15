@@ -144,7 +144,7 @@ scraper-SUAPPos/
 
 ## Segurança
 
-- ⚠️ **Nunca** commitar credenciais no repositório
+- **Nunca** commitar credenciais no repositório
 - Credenciais devem ser armazenadas apenas em `.env`
 - O arquivo `.env` está listado no `.gitignore`
 - Dados extraídos devem ser tratados conforme LGPD
