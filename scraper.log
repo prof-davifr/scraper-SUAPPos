@@ -1,0 +1,38 @@
+2026-04-15 16:49:36,836 [INFO] __main__: Starting browser...
+2026-04-15 16:49:36,848 [INFO] WDM: ====== WebDriver manager ======
+2026-04-15 16:49:36,917 [INFO] WDM: Get LATEST chromedriver version for google-chrome
+2026-04-15 16:49:37,100 [INFO] WDM: Get LATEST chromedriver version for google-chrome
+2026-04-15 16:49:37,175 [INFO] WDM: Driver [/home/davi/.wdm/drivers/chromedriver/linux64/147.0.7727.57/chromedriver-linux64/chromedriver] found in cache
+2026-04-15 16:49:38,311 [INFO] __main__: Authenticating on SUAP...
+2026-04-15 16:49:38,311 [INFO] src.login: Login attempt 1/3
+2026-04-15 16:49:38,312 [INFO] src.login: Navigating to https://suap.ifba.edu.br/accounts/login/?next=/
+2026-04-15 16:49:47,389 [INFO] src.login: Login successful
+2026-04-15 16:49:47,390 [INFO] __main__: Starting data extraction...
+2026-04-15 16:49:47,390 [INFO] src.scraper: Exporting Mestrado (id=9)
+2026-04-15 16:50:12,089 [INFO] src.scraper: Task 26383 completed
+2026-04-15 16:50:12,089 [INFO] src.scraper: Download URL: https://suap.ifba.edu.br/djtools/process_progress2/1/26383/
+2026-04-15 16:50:12,230 [INFO] src.scraper: Download: status=200, size=401920 bytes
+2026-04-15 16:50:12,231 [INFO] src.scraper: Saved XLS to ./output/raw_export_1776282612.xls
+2026-04-15 16:50:12,265 [INFO] src.scraper: DataFrame shape: (1784, 10), columns: ['#', 'Nome', 'Matrícula', 'Curso', 'Campus', 'Polo', 'Situação', 'E-mail Acadêmico', 'E-mail Pessoal', 'Ano/Periodo Letivo']...
+2026-04-15 16:50:12,308 [INFO] src.scraper: Exported 1784 students for Mestrado
+2026-04-15 16:50:12,309 [INFO] src.scraper: Exporting Especialização (id=10)
+2026-04-15 16:50:35,679 [INFO] src.scraper: Task 26384 completed
+2026-04-15 16:50:35,679 [INFO] src.scraper: Download URL: https://suap.ifba.edu.br/djtools/process_progress2/1/26384/
+2026-04-15 16:50:35,807 [INFO] src.scraper: Download: status=200, size=595968 bytes
+2026-04-15 16:50:35,809 [INFO] src.scraper: Saved XLS to ./output/raw_export_1776282635.xls
+2026-04-15 16:50:35,902 [INFO] src.scraper: DataFrame shape: (2545, 10), columns: ['#', 'Nome', 'Matrícula', 'Curso', 'Campus', 'Polo', 'Situação', 'E-mail Acadêmico', 'E-mail Pessoal', 'Ano/Periodo Letivo']...
+2026-04-15 16:50:35,979 [INFO] src.scraper: After Lato Sensu filter: 500 students
+2026-04-15 16:50:35,979 [INFO] src.scraper: Exported 500 students for Especialização
+2026-04-15 16:50:35,979 [INFO] src.scraper: Exporting Doutorado (id=16)
+2026-04-15 16:50:49,560 [INFO] src.scraper: Task 26385 completed
+2026-04-15 16:50:49,560 [INFO] src.scraper: Download URL: https://suap.ifba.edu.br/djtools/process_progress2/1/26385/
+2026-04-15 16:50:49,733 [INFO] src.scraper: Download: status=200, size=42496 bytes
+2026-04-15 16:50:49,733 [INFO] src.scraper: Saved XLS to ./output/raw_export_1776282649.xls
+2026-04-15 16:50:49,741 [INFO] src.scraper: DataFrame shape: (163, 10), columns: ['#', 'Nome', 'Matrícula', 'Curso', 'Campus', 'Polo', 'Situação', 'E-mail Acadêmico', 'E-mail Pessoal', 'Ano/Periodo Letivo']...
+2026-04-15 16:50:49,752 [INFO] src.scraper: Exported 163 students for Doutorado
+2026-04-15 16:50:49,753 [INFO] __main__: Total students extracted: 2447
+2026-04-15 16:50:49,753 [INFO] __main__: Exporting data in csv format...
+2026-04-15 16:50:49,789 [INFO] src.exporter: Exported 2447 records to CSV
+2026-04-15 16:50:49,790 [INFO] src.exporter: Data exported to ./output/alunos_pos_20260415_165049.csv
+2026-04-15 16:50:49,790 [INFO] __main__: ✅ Data saved to: ./output/alunos_pos_20260415_165049.csv
+2026-04-15 16:50:49,791 [INFO] __main__: Closing browser...
