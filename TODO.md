@@ -31,13 +31,21 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       "Arquivo gerado com sucesso" (limite de 120 s) e baixa o XLS pelo endpoint
       `process_progress2` reaproveitando os cookies do Selenium em uma sessão
       `requests`.
-- [x] **Filtro Lato Sensu na Especialização** — a modalidade 10 traz cursos que
-      não são pós-graduação; `_is_lato_sensu()` mantém só os que têm "lato sensu"
-      no nome do curso.
+- [x] **Filtro Lato Sensu removido (03/09/2026)** — `_is_lato_sensu()` mantinha
+      só os cursos com a expressão "lato sensu" no nome. A premissa estava
+      errada: a modalidade 10 do SUAP já é a Especialização, e todo curso dela é
+      pós-graduação lato sensu. O filtro descartava 2193 alunos em 45 cursos
+      chamados apenas "Especialização em ...". O painel mostrava 573
+      especializandos contra os 2766 do SUAP, e 13 campi sumiam da aba de
+      Pós-Graduação. O mesmo filtro existia em
+      `scraper-prpgi/src/scrapers/pos.py`, e saiu junto — se só um fosse
+      corrigido, o outro desfaria a correção na coleta seguinte.
 - [x] **Exportação em CSV, JSON e XLSX** (`src/exporter.py`), com nome de arquivo
       carimbado por timestamp.
 - [x] **Rodada real de 21/08/2026**: 2.549 registros no total (1.813 Mestrado,
       163 Doutorado, o restante Especialização já filtrada), CSV gerado sem erro.
+- [x] **Rodada de 03/09/2026, já sem o filtro**: 4.770 registros (1.841
+      Mestrado, 2.766 Especialização, 163 Doutorado), em 20 campi.
 
 ### Entrega ao dashboard
 - [x] **O CSV de 21/08/2026 chegou ao dashboard e está em produção.** Confirmado

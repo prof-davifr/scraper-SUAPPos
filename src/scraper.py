@@ -25,7 +25,15 @@ class AlunosScraper:
         """
         Scrapes student data for all specified modalidades using XLS export.
         Returns a list of student dictionaries.
-        For especializacao (id=10), filters only "Lato Sensu" courses.
+
+        Nenhum filtro por nome de curso: a modalidade 10 do SUAP já é a
+        Especialização, e todo curso dela é pós-graduação lato sensu.
+
+        Havia um filtro aqui, `_is_lato_sensu()`, que mantinha só os cursos cujo
+        nome trazia a expressão "lato sensu". Ele descartava 2193 alunos em 45
+        cursos chamados apenas "Especialização em ...". O painel mostrava 573
+        especializandos contra os 2766 do SUAP, e 13 campi sumiam da aba de
+        Pós-Graduação. Removido em setembro de 2026.
         """
         if modalidades is None:
             modalidades = [
@@ -52,14 +60,6 @@ class AlunosScraper:
 
             students = self._export_and_parse()
 
-            # Filter especializacao to only "Lato Sensu"
-            if modalidade_id == Config.MODALIDADE_ESPECIALIZACAO:
-                students = [
-                    s for s in students
-                    if self._is_lato_sensu(s.get("curso", ""))
-                ]
-                logger.info(f"After Lato Sensu filter: {len(students)} students")
-
             logger.info(f"Exported {len(students)} students for {modalidade_name}")
 
             for student in students:
@@ -79,18 +79,6 @@ class AlunosScraper:
         elif modalidade_id == Config.MODALIDADE_ESPECIALIZACAO:
             return "Especialização"
         return f"Modalidade {modalidade_id}"
-
-    @staticmethod
-    def _is_lato_sensu(curso: str) -> bool:
-        """
-        Checks if a course name indicates a Lato Sensu post-graduation.
-        Matches: 'Lato Sensu', 'Pós-Graduação Lato Sensu', 'Pós-graduação lato sensu', etc.
-        """
-        if not curso:
-            return False
-        curso_lower = curso.lower()
-        # Lato Sensu indicates a specialization (specialization level)
-        return "lato sensu" in curso_lower
 
     def _export_and_parse(self) -> list[dict]:
         """Triggers the XLS export via Selenium, follows the task, and downloads the file."""
