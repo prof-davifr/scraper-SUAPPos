@@ -9,7 +9,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import (
+    TimeoutException,
+    NoSuchElementException,
+    ElementClickInterceptedException,
+)
 
 from src.config import Config
 
@@ -80,17 +84,29 @@ class SuapLogin:
         logger.debug("Password entered")
 
     def _submit_form(self):
-        """Submit the login form."""
-        # The form has an input[type=submit] with value="Acessar"
+        """Submit the login form.
+
+        Na janela de 1920x1080 do modo headless um <ul> da pagina cobre o
+        botao "Acessar" e o clique nativo e interceptado. O clique via
+        JavaScript nao depende do que esta por cima, entao serve de fallback
+        antes de recorrer ao Enter.
+        """
         try:
             submit_btn = self.driver.find_element(By.CSS_SELECTOR, "input[type='submit'][value='Acessar']")
-            submit_btn.click()
-            logger.debug("Form submitted via submit button")
         except NoSuchElementException:
-            # Fallback: press Enter on password field
             password_field = self.driver.find_element(By.ID, "id_password")
             password_field.send_keys(Keys.RETURN)
-            logger.debug("Submitted form by pressing Enter")
+            logger.debug("Submitted form by pressing Enter (no submit button)")
+            return
+
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", submit_btn)
+        try:
+            submit_btn.click()
+            logger.debug("Form submitted via submit button")
+        except ElementClickInterceptedException:
+            logger.warning("Submit button intercepted; clicking via JavaScript")
+            self.driver.execute_script("arguments[0].click();", submit_btn)
+            logger.debug("Form submitted via JavaScript click")
 
     def _is_logged_in(self) -> bool:
         """Check if login was successful."""
