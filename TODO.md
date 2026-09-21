@@ -71,7 +71,10 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
 
 ## 📋 Backlog
 
-- [ ] **Decidir o destino das 2 alterações não commitadas — bloqueia tudo o
+- [x] **Decidir o destino das 2 alterações não commitadas — bloqueia tudo o
+      mais.** Resolvido: o conserto do login entrou em `322a2c8` (03/09/2026) e o
+      `scraper.log` saiu do versionamento em 20/09/2026. Registro original:
+- [x] **(original) Decidir o destino das 2 alterações não commitadas — bloqueia tudo o
       mais.** `git status` mostra `src/login.py` e `scraper.log` modificados há
       10 dias. **O diff de `src/login.py` conserta o login quebrado**: na janela
       1920x1080 do modo headless um `<ul>` da página cobre o botão "Acessar" e o
@@ -85,7 +88,9 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       clicking via JavaScript" é seguido de "Login successful" e dos 2.549
       registros. É a mesma correção que o `scraper-DGP` já commitou. Falta só
       commitar aqui — sem ela o coletor não loga em headless.
-- [ ] **Tirar `scraper.log` do versionamento.** O arquivo está rastreado
+- [x] **Tirar `scraper.log` do versionamento.** Feito em 20/09/2026: o arquivo
+      saiu do índice (`git rm --cached`) e `*.log` entrou no `.gitignore`. A
+      cópia local continua onde estava. Registro original: O arquivo está rastreado
       (`git ls-files`), foi commitado com 38 linhas em `89c748d` e hoje tem 396
       na árvore de trabalho — o `FileHandler` do `main.py` grava em modo append
       na raiz do repositório, então **toda execução suja a árvore** e gera um
