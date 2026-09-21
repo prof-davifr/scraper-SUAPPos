@@ -10,3 +10,7 @@ build/
 venv/
 chromedriver
 geckodriver
+
+# Log de execucao: regenerado a cada coleta
+scraper.log
+*.log
