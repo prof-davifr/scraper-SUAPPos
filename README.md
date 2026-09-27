@@ -81,10 +81,18 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 SUAP_USERNAME=seu_usuario
-SUAP_PASSWORD=sua_senha
 OUTPUT_DIR=./output
 OUTPUT_FORMAT=csv
 ```
+
+A senha pode ficar no cofre do sistema (serviço `suap`), fora de qualquer
+arquivo:
+
+```bash
+keyring set suap seu_usuario
+```
+
+`SUAP_PASSWORD` no `.env` também funciona, e tem precedência sobre o cofre.
 
 ## Uso
 

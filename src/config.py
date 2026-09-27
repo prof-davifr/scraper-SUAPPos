@@ -9,12 +9,24 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def _suap_password(username: str) -> str:
+    """SUAP_PASSWORD from the environment, or the system keyring (service 'suap')."""
+    password = os.getenv("SUAP_PASSWORD", "")
+    if password or not username:
+        return password
+    try:
+        import keyring
+        return keyring.get_password("suap", username) or ""
+    except Exception:
+        return ""
+
+
 class Config:
     """Centralized configuration for the scraper."""
 
     # SUAP credentials
     SUAP_USERNAME = os.getenv("SUAP_USERNAME", "")
-    SUAP_PASSWORD = os.getenv("SUAP_PASSWORD", "")
+    SUAP_PASSWORD = _suap_password(SUAP_USERNAME)
 
     # SUAP URLs
     SUAP_BASE_URL = os.getenv("SUAP_BASE_URL", "https://suap.ifba.edu.br")
