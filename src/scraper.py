@@ -131,11 +131,7 @@ class AlunosScraper:
                 f.write(response.content)
             logger.info(f"Saved XLS to {filepath}")
 
-            # Parse the XLS file - row 0 contains the header names
-            try:
-                df = pd.read_excel(io.BytesIO(response.content), engine="xlrd", header=1)
-            except Exception:
-                df = pd.read_excel(io.BytesIO(response.content), engine="openpyxl", header=1)
+            df = self._read_xls(response.content)
 
             logger.info(f"DataFrame shape: {df.shape}, columns: {list(df.columns)[:10]}...")
 
@@ -157,11 +153,43 @@ class AlunosScraper:
             return students
 
         except ImportError:
-            logger.error("pandas or requests not installed")
-            return []
+            # Dependência faltando é falha de ambiente: repetir nas outras
+            # modalidades só produziria o mesmo erro. Sobe até o main.py.
+            raise
         except Exception as e:
             logger.error(f"Error in export: {e}", exc_info=True)
             return []
+
+    @staticmethod
+    def _read_xls(content: bytes):
+        """
+        Parses the SUAP XLS export (row 0 is a title, row 1 has the header names).
+
+        O SUAP exporta em .xls BIFF, que só o xlrd lê. Sem o xlrd, o pandas
+        levanta ImportError; antes isso caía no openpyxl, que respondia
+        "File is not a zip file" e escondia a causa (coleta de 21/08/2026).
+        Agora a falta do xlrd vira ImportError com a instrução de instalação,
+        e o openpyxl só é tentado quando o xlrd está presente mas não consegue
+        ler o arquivo -- e o erro do xlrd fica registrado.
+        """
+        import pandas as pd
+
+        try:
+            return pd.read_excel(io.BytesIO(content), engine="xlrd", header=1)
+        except ImportError as e:
+            raise ImportError(
+                "xlrd is missing (or too old), and it is required to read the SUAP .xls export. "
+                "Install the dependencies with: pip install -r requirements.txt"
+            ) from e
+        except Exception as xlrd_error:
+            logger.warning(f"xlrd could not read the export ({xlrd_error!r}); trying openpyxl")
+            try:
+                return pd.read_excel(io.BytesIO(content), engine="openpyxl", header=1)
+            except Exception as openpyxl_error:
+                raise ValueError(
+                    f"Could not parse the export: xlrd said {xlrd_error!r}, "
+                    f"openpyxl said {openpyxl_error!r}"
+                ) from xlrd_error
 
     def _wait_for_task_completion(self) -> str | None:
         """

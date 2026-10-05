@@ -123,7 +123,16 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       registro. Provavelmente dedup ou descarte de linha incompleta no build do
       dashboard, mas isso não foi verificado. Confirmar de que lado some e, se
       for descarte silencioso, fazer o build reportar a contagem.
-- [ ] **Não deixar o fallback do `pandas` mascarar dependência faltando.** Em
+- [x] **Não deixar o fallback do `pandas` mascarar dependência faltando.**
+      Feito em 04/10/2026: a leitura do XLS foi para `AlunosScraper._read_xls`.
+      Sem o `xlrd`, ela levanta `ImportError` dizendo que falta o `xlrd` e que
+      se instala com `pip install -r requirements.txt`; o erro sobe até o
+      `main.py`, que encerra a coleta em vez de repetir a falha nas três
+      modalidades e terminar em "No students found". O `openpyxl` só é tentado
+      quando o `xlrd` existe mas não lê o arquivo, e o erro do `xlrd` é
+      registrado e encadeado. Teste sem rede em `tests/test_scraper.py`.
+      Registro original:
+- [x] **(original) Não deixar o fallback do `pandas` mascarar dependência faltando.** Em
       21/08, das 14:07 às 14:08, as 3 exportações morreram com
       `Error in export: File is not a zip file`. A causa real, visível no
       traceback, é o `xlrd` ausente no ambiente: o `except Exception` do
@@ -131,7 +140,11 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       essa mensagem enganosa. O `xlrd>=2.0.0` está no `requirements.txt`, então
       foi falha de ambiente — mas o erro precisa dizer isso. Tratar
       `ImportError` à parte do erro de parsing.
-- [ ] **Parar de imprimir o primeiro registro no terminal.** O bloco final do
+- [x] **Parar de imprimir o primeiro registro no terminal.** Feito em
+      04/10/2026: o resumo final do `main.py` (`format_summary`) mostra a
+      contagem por modalidade e os nomes das colunas, nunca os valores de um
+      registro. Registro original:
+- [x] **(original) Parar de imprimir o primeiro registro no terminal.** O bloco final do
       `main.py` faz `print` de "First record preview" com os valores do primeiro
       aluno, campo a campo, truncados em 80 caracteres — o que inclui os campos
       de identificação. Não vai para o `scraper.log` (é `print`, não `logger`),

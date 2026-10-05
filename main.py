@@ -5,6 +5,7 @@ Orchestrates login, scraping, and data export.
 
 import argparse
 import logging
+from collections import Counter
 import sys
 import os
 
@@ -54,6 +55,22 @@ def setup_driver(headless: bool = False) -> webdriver.Chrome:
         driver = webdriver.Chrome(options=chrome_options)
 
     return driver
+
+
+def format_summary(students: list[dict]) -> str:
+    """Count per modalidade and the column names -- never the values of a record."""
+    if not students:
+        return ""
+
+    lines = []
+    if any("modalidade" in student for student in students):
+        counts = Counter(student.get("modalidade") or "(sem modalidade)" for student in students)
+        lines.append("\nRecords per modalidade:")
+        for modalidade, count in sorted(counts.items()):
+            lines.append(f"  {modalidade}: {count}")
+
+    lines.append(f"\nAvailable fields: {', '.join(students[0].keys())}")
+    return "\n".join(lines)
 
 
 def parse_args():
@@ -159,16 +176,18 @@ def main():
             print(f"Output file: {filepath}")
             print(f"{'='*60}")
 
-            # Print column preview
-            if students:
-                print(f"\nAvailable fields: {', '.join(students[0].keys())}")
-                print(f"\nFirst record preview:")
-                for key, value in list(students[0].items()):
-                    print(f"  {key}: {str(value)[:80]}{'...' if len(str(value)) > 80 else ''}")
+            # Só agregados: os valores de um registro trazem nome, matrícula e
+            # e-mails do aluno, e o terminal pode estar redirecionado para log.
+            print(format_summary(students))
 
         else:
             logger.warning("Export returned no file path")
 
+    except ImportError as e:
+        logger.error(f"Missing dependency: {e}")
+        if "requirements.txt" not in str(e):
+            logger.error("Install the dependencies with: pip install -r requirements.txt")
+        sys.exit(1)
     except KeyboardInterrupt:
         logger.info("Scraper interrupted by user")
         sys.exit(130)
