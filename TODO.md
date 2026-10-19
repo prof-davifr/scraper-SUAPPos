@@ -110,7 +110,20 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       mais recente já tem 10 dias. Decidir a periodicidade (o calendário
       acadêmico sugere algo por período letivo, com uma rodada extra depois de
       cada matrícula) e registrar no `AGENTS.md`.
-- [ ] **Avaliar CI — o repositório não tem `.github/workflows/`.** Diferente do
+- [x] **Avaliar CI — o repositório não tem `.github/workflows/`.** Feito em
+      18/10/2026, só no repositório local: `.github/workflows/ci.yml` roda, em
+      push para `main` e em pull request, `ruff check --select E4,E7,E9,F` e
+      `pytest -q`, sem rede institucional e sem credencial (`SUAP_USERNAME` e
+      `SUAP_PASSWORD` vazios, então o `Config` nem consulta o cofre). Os testes
+      novos em `tests/test_config.py` cobrem `_get_modalidade_name`,
+      `Config.get_alunos_url_filtered` e `Config.validate`; o
+      `_is_lato_sensu` não existe mais (saiu em 03/09). O `main.py` não é
+      importado nos testes, porque a importação abre o `scraper.log` na pasta
+      corrente. Antes, o lint acusava 4 avisos triviais (`os` sem uso e três
+      f-strings sem campo), corrigidos em `59982e8`. Localmente: 13 testes
+      passam e o lint fica limpo. **Falta o push** para o workflow começar a
+      rodar no GitHub. Registro original:
+- [x] **(original) Avaliar CI — o repositório não tem `.github/workflows/`.** Diferente do
       `scraper-DGP`, aqui não há nada vigiando o coletor. Um workflow completo é
       inviável pelo mesmo motivo daquele repo (o runner público do GitHub não
       alcança o SUAP e a credencial precisaria estar em segredo), mas há um
