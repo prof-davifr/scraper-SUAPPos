@@ -181,7 +181,17 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       de identificação. Não vai para o `scraper.log` (é `print`, não `logger`),
       mas vaza para qualquer redirecionamento de saída ou log de agendador.
       Trocar pela contagem por modalidade, ou imprimir só os nomes das colunas.
-- [ ] **Atualizar o `README.md`, que descreve um projeto diferente do que
+- [x] **Atualizar o `README.md`, que descreve um projeto diferente do que
+      existe.** Feito em 18/10/2026: o README foi reescrito a partir do código.
+      Descreve o fluxo real (login, task de exportação, download com os cookies
+      do Selenium, leitura pelo `xlrd`), os IDs das três modalidades, a saída
+      do filtro Lato Sensu, as variáveis do `.env` e o cofre do sistema, todas
+      as flags (inclusive `--modalidade` e o `both` que coleta as três), as 11
+      colunas reais do CSV (conferidas no cabeçalho do CSV de 03/09), a entrega
+      ao dashboard, a estrutura de pastas que existe e como rodar os testes.
+      Saíram o BeautifulSoup, o Firefox, o `config.py` na raiz e o
+      `src/parser.py`. Registro original:
+- [x] **(original) Atualizar o `README.md`, que descreve um projeto diferente do que
       existe.** Divergências verificadas: cita `config.py` na raiz (está em
       `src/`), `src/parser.py` (não existe) e `tests/` (não existe); a tabela
       "Estrutura de Dados" lista campos (`programa`, `nivel`, `data_ingresso`,
