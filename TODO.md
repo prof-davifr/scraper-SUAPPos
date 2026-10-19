@@ -118,7 +118,25 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       importação dos módulos e teste das funções puras (`_is_lato_sensu`,
       `_get_modalidade_name`, `Config.get_alunos_url_filtered`,
       `Config.validate`). Decidir se compensa antes de escrever o workflow.
-- [ ] **Reconciliar 2.549 coletados × 2.548 publicados.** O CSV de 21/08 tem
+- [x] **Reconciliar 2.549 coletados × 2.548 publicados.** Feito em
+      18/10/2026: o registro sumia no build do dashboard, e já não some. O CSV
+      de 21/08 (idêntico em `output/` e em `dashboard-prpgi/dados/`) tem 2.549
+      registros e 2.550 linhas físicas, porque um aluno do Mestrado tem uma
+      quebra de linha dentro de uma célula entre aspas. O `parseCSV` antigo do
+      dashboard fazia `split('\n')` antes de olhar as aspas: o registro virava
+      dois, ambos sem `ano/periodo_letivo` válido, e os dois eram descartados
+      pelo `return null` do mapeamento da pós — 2.548. Reproduzido lendo o
+      mesmo CSV com o parser antigo (2.550 registros, 2.548 mantidos) e com o
+      `parseCSV` atual (2.549 e 2.549). O conserto é o `d1ffa53` do
+      `dashboard-prpgi` (02/09/2026, `splitCsvRecords()`). No CSV de 03/09, para
+      onde aponta hoje o `meta.sourceFiles` do `data.json`, são 4.770 registros
+      (2 com quebra de linha dentro) e o `data.json` tem 4.770 em
+      `posgraduacao`; nenhum registro sem matrícula, sem ano válido ou com
+      matrícula repetida. Fica para o `dashboard-prpgi`:
+      o build ainda descarta em silêncio as linhas sem matrícula ou sem ano;
+      reportar essa contagem ao lado do total da pós é mudança lá, não aqui.
+      Registro original:
+- [x] **(original) Reconciliar 2.549 coletados × 2.548 publicados.** O CSV de 21/08 tem
       2.549 linhas e a aba Pós-Graduação do dashboard mostra 2.548 — falta 1
       registro. Provavelmente dedup ou descarte de linha incompleta no build do
       dashboard, mas isso não foi verificado. Confirmar de que lado some e, se
