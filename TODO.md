@@ -158,7 +158,13 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       e faltam `curso`, `campus`, `polo` e `ano/período letivo`; não menciona a
       Especialização nem o filtro Lato Sensu; e a flag `--modalidade` (com o
       valor `both`, que na verdade significa "as três") não aparece.
-- [ ] **Limpar dependências não usadas do `requirements.txt`.** `flask` e
+- [x] **Limpar dependências não usadas do `requirements.txt`.** Feito em
+      18/10/2026: `beautifulsoup4`, `lxml`, `flask` e `gunicorn` saíram. Antes,
+      `grep` por `bs4`, `BeautifulSoup`, `lxml`, `read_html`, `read_xml`,
+      `flask` e `gunicorn` em todos os `.py` do repositório: nenhum uso. O
+      `pandas` só lê `.xls` (xlrd) e grava `.xlsx` (openpyxl), sem precisar do
+      `lxml`. Registro original:
+- [x] **(original) Limpar dependências não usadas do `requirements.txt`.** `flask` e
       `gunicorn` estão declarados e não há servidor web algum no repositório;
       `beautifulsoup4` e `lxml` também não são importados por nenhum módulo
       (`grep` em `main.py` e `src/*.py` não retorna nada). Só instalam peso e
