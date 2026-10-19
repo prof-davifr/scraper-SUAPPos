@@ -106,8 +106,13 @@ coleta e a entrega ao dashboard continuam manuais.
       `git rm --cached scraper.log`, acrescentar `scraper.log` (ou `*.log`) ao
       `.gitignore` e, de preferência, mandar o log para `output/`, que já é
       ignorado.
-- [ ] **Definir a cadência de reexportação — hoje não está definida em lugar
-      nenhum.** Nem `README.md`, nem `AGENTS.md`, nem a documentação do
+- [x] **Definir a cadência de reexportação — hoje não está definida em lugar
+      nenhum.** Resolvido em 19/10/2026: coleta automática mensal pelo
+      `dashboard-prpgi/scripts/atualizar-suap.sh` (timer `coleta-suap`, que
+      verifica todo dia e coleta quando o CSV mais novo em `dados/` tem 30 dias).
+      Ver `docs/proveniencia-dados.md` §2.1.1 do dashboard. A mesma rodada achou
+      e corrigiu o clique do link de exportação, interceptado pelo `<header>` no
+      modo headless (clique por JavaScript, como no login). Registro original: Nem `README.md`, nem `AGENTS.md`, nem a documentação do
       dashboard dizem de quanto em quanto tempo o coletor deve rodar; as 4
       exportações
       existentes saíram em intervalos irregulares (abr, 11/07, 21/07, 21/08) e a

@@ -85,11 +85,18 @@ class AlunosScraper:
         try:
             import pandas as pd
             import requests
+            from selenium.common.exceptions import ElementClickInterceptedException
             from selenium.webdriver.common.by import By
 
-            # Click the export link to trigger the task
+            # Click the export link to trigger the task. In headless mode the
+            # fixed <header> covers the link (same as the login button), so the
+            # native click is intercepted; fall back to a JavaScript click.
             export_link = self.driver.find_element(By.CSS_SELECTOR, "a[href*='export_to_xls']")
-            export_link.click()
+            try:
+                export_link.click()
+            except ElementClickInterceptedException:
+                logger.warning("Export link intercepted; clicking via JavaScript")
+                self.driver.execute_script("arguments[0].click();", export_link)
 
             # Wait for task page and poll for completion
             task_id = self._wait_for_task_completion()
