@@ -53,7 +53,7 @@ class SuapLogin:
                 logger.error(f"Error on login attempt {attempt}: {e}")
 
             if attempt < Config.MAX_RETRIES:
-                logger.info(f"Retrying in 3 seconds...")
+                logger.info("Retrying in 3 seconds...")
                 time.sleep(3)
 
         logger.error("All login attempts failed")

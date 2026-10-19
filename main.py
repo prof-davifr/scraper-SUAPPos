@@ -7,7 +7,6 @@ import argparse
 import logging
 from collections import Counter
 import sys
-import os
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -171,7 +170,7 @@ def main():
             logger.info(f"✅ Data saved to: {filepath}")
             # Print summary
             print(f"\n{'='*60}")
-            print(f"SCRAPING COMPLETE")
+            print("SCRAPING COMPLETE")
             print(f"Total records: {len(students)}")
             print(f"Output file: {filepath}")
             print(f"{'='*60}")

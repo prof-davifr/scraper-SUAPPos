@@ -121,7 +121,7 @@ class AlunosScraper:
             logger.info(f"Download: status={response.status_code}, size={len(response.content)} bytes")
 
             if len(response.content) < 100:
-                logger.error(f"Downloaded content too small, likely not an XLS file")
+                logger.error("Downloaded content too small, likely not an XLS file")
                 return []
 
             # Save for reference
