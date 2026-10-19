@@ -19,6 +19,10 @@ entrega ao dashboard é cópia de arquivo pelo sistema de arquivos. **O reposit�
 está parado há 41 dias** — último commit `914fa44`, de 21/07/2026 — e tem **duas
 alterações não commitadas** (`src/login.py` e `scraper.log`).
 
+Em 18/10/2026: as duas alterações já foram resolvidas (ver Backlog) e existe
+`.github/workflows/ci.yml` com lint e testes, ainda não enviado ao GitHub. A
+coleta e a entrega ao dashboard continuam manuais.
+
 ---
 
 ## 🟢 Concluído
@@ -110,6 +114,18 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       mais recente já tem 10 dias. Decidir a periodicidade (o calendário
       acadêmico sugere algo por período letivo, com uma rodada extra depois de
       cada matrícula) e registrar no `AGENTS.md`.
+      **Análise (18/10/2026) — decisão do dono, segue pendente.** Fatos: em
+      `dashboard-prpgi/dados/scraper-SUAPPos/` há 6 exportações (15/04, 11/07,
+      21/07, 21/08, 02/09 e 03/09); a mais recente tem 45 dias. A
+      `docs/proveniencia-dados.md` do dashboard registra "Manual, conforme
+      exportação do SUAP. Sem periodicidade fixa estabelecida." Não há cron
+      nem timer do systemd para este coletor (o único timer de usuário é o
+      `grupos-dgp`). Cada rodada exige a máquina com rede que alcance o SUAP,
+      Chrome e a senha no cofre, então a cadência é de pessoa, não de
+      servidor. Recomendação: uma rodada por mês e uma extra logo depois do
+      fim de cada período de matrícula da pós, registradas no `AGENTS.md` e na
+      `proveniencia-dados.md` do dashboard; um timer como o do `grupos-dgp`
+      só depois que a coleta tiver rodado algumas vezes sem intervenção.
 - [x] **Avaliar CI — o repositório não tem `.github/workflows/`.** Feito em
       18/10/2026, só no repositório local: `.github/workflows/ci.yml` roda, em
       push para `main` e em pull request, `ruff check --select E4,E7,E9,F` e
@@ -216,3 +232,18 @@ alterações não commitadas** (`src/login.py` e `scraper.log`).
       institucional lenta isso vira falha silenciosa (a página ainda não
       carregou e o elemento de exportação não é encontrado); em rede rápida,
       desperdício. Migrar para `WebDriverWait`, como o `login.py` já faz.
+      **Bloqueado em 18/10/2026: falta como verificar.** A troca é pequena,
+      mas só se comprova numa coleta de verdade (Chrome + rede do SUAP + login),
+      e nesta sessão não se abriu navegador nem se acessou o SUAP. A última
+      coleta boa (03/09, 4.770 registros) rodou com os `sleep` atuais, então
+      mexer sem uma rodada de conferência troca um risco conhecido por um
+      desconhecido. Plano para quando houver uma rodada acompanhada: no
+      `scrape_all()`, trocar o `time.sleep(5)` por
+      `WebDriverWait(driver, Config.TIMEOUT).until(...)` que aceite a URL de
+      login (sessão expirada) ou a presença de `a[href*='export_to_xls']`; no
+      `_wait_for_task_completion()`, `WebDriverWait(driver, 120,
+      poll_frequency=1)` com uma condição que extraia o id de `/process2/<id>/`
+      da URL e devolva o id quando o `body` tiver "Arquivo gerado com
+      sucesso". Os mesmos `time.sleep(3)` existem no `login.py`
+      (`_navigate_to_login` e `_is_logged_in`). Testar com um driver falso,
+      como em `tests/test_scraper.py`, e depois numa coleta real.
